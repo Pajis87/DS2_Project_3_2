@@ -17,37 +17,24 @@ namespace DS2_Project_3.orm.dao {
                 vId = :vId
         """;
 
-        public static VycvikDTO? ZiskejPodleId(Database pDb, int tId) {
+        public static VycvikDTO? ZiskejPodleId(Database pDb, int vId) {
             Database db = Database.Connect(pDb);
             OracleCommand command = db.CreateCommand(SqlZiskejPodleId);
-            command.Parameters.Add(":tId", tId);
+            command.Parameters.Add(":vId", vId);
             OracleDataReader reader = db.Select(command);
 
             List<VycvikDTO> list = new List<VycvikDTO>();
             while (reader.Read()) {
                 VycvikDTO vycvik = new VycvikDTO();
                 vycvik.vId = reader.GetInt32(0);
-                vycvik.poznamky = reader.GetString(1);
+                if (!reader.IsDBNull(1)) {
+                    vycvik.poznamky = reader.GetString(1);
+                }
                 vycvik.cas_od = reader.GetDateTime(2);
-                vycvik.cas_do = reader.GetDateTime(2);
-                vycvik.pocetMist = reader.GetInt32(0);
-                vycvik.pocetVolnychMist = reader.GetInt32(0); // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                                                              // TODO: nepouzivat pocet volnych mist, ale udelat si select na pocet, to same v pl/sql
-                vycvik.trenerId = reader.GetInt32(0);
+                vycvik.cas_do = reader.GetDateTime(3);
+                vycvik.pocetMist = reader.GetInt32(4);
+                vycvik.pocetVolnychMist = reader.GetInt32(5);
+                vycvik.trenerId = reader.GetInt32(6);
                 list.Add(vycvik);
             }
             reader.Close();

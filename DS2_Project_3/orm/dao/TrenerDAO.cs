@@ -13,7 +13,7 @@ namespace DS2_Project_3.orm.dao {
         """;
 
 
-        public static List<TrenerDTO> ZiskejPodleId(Database pDb, int tId) {
+        public static TrenerDTO? ZiskejPodleId(Database pDb, int tId) {
             Database db = Database.Connect(pDb);
             OracleCommand command = db.CreateCommand(SqlZiskejPodleId);
             command.Parameters.Add(":tId", tId);
@@ -29,7 +29,10 @@ namespace DS2_Project_3.orm.dao {
             reader.Close();
 
             Database.Close(pDb, db);
-            return list;
+            
+            if (list.Count == 0)
+                return null;
+            return list[0];
         }
     }
 }

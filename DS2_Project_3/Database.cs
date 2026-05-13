@@ -55,6 +55,12 @@ namespace DS2_Project_3 {
             return rowNumber;
         }
 
+        public int ExecuteScalar(OracleCommand command) {
+            int value = 0;
+            value = Convert.ToInt32(command.ExecuteScalar());
+            return value;
+        }
+
         public OracleCommand CreateCommand(string strCommand) {
             OracleCommand command = new OracleCommand(strCommand, Connection);
 
