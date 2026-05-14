@@ -5,8 +5,8 @@
         public string prijmeni { get; set; }
         public string telefon { get; set; }
         public string email { get; set; }
-        DateTime datumRegistrace { get; set; }
+        public DateTime datumRegistrace { get; set; }
         public bool aktivni { get; set; }
-        double cenaNaHodinu { get; set; }
+        public double cenaZaHodinu { get; set; }
     }
 }

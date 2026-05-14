@@ -6,7 +6,13 @@ namespace DS2_Project_3.orm.dao {
         """
             SELECT
                 tId,
-                jmeno
+                jmeno,
+                prijmeni,
+                telefon,
+                email,
+                datumRegistrace,
+                aktivni,
+                cenaZaHodinu
             FROM nf_trener
             WHERE
                 tId = :tId
@@ -24,6 +30,12 @@ namespace DS2_Project_3.orm.dao {
                 TrenerDTO trener = new TrenerDTO();
                 trener.tId = reader.GetInt32(0);
                 trener.jmeno = reader.GetString(1);
+                trener.prijmeni = reader.GetString(2);
+                trener.telefon = reader.GetString(3);
+                trener.email = reader.GetString(4);
+                trener.datumRegistrace = reader.GetDateTime(5);
+                trener.aktivni = reader.GetBoolean(6);
+                trener.cenaZaHodinu = reader.GetDouble(7);
                 list.Add(trener);
             }
             reader.Close();

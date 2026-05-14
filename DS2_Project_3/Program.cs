@@ -48,7 +48,7 @@ namespace DS2_Project_3 {
                 Console.WriteLine("Úspěšně připojeno k databázi.\n");
             }
 
-            TransakceDAO.MojeTransakce(db, 0, 7, [], "");
+            TransakceDAO.MojeTransakce(db, 0, 7, [1], "");
             //TransakceDAO.MojeTransakce(db, 0, 1, [], "");
 
             /*int? id_order = null;

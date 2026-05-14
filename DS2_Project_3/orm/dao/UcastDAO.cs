@@ -14,7 +14,7 @@ namespace DS2_Project_3 {
             WHERE
                 vycvik = :vycvik
         """;
-        private static string SqlZisekPocetUcastNaVycviku =
+        private static string SqlZiskejPocetUcastNaVycviku =
         """
             SELECT
                 count(*)
@@ -22,6 +22,21 @@ namespace DS2_Project_3 {
                 nf_ucast
             WHERE
                 vycvik = :vycvik
+        """;
+        private static string SqlZiskejPocetKuponu =
+        """
+            SELECT
+                count(*)
+            FROM
+                nf_ucast
+            WHERE
+                kupon = :kupon
+        """;
+        private static string SqlPridejNovouUcast =
+        """
+            INSER INTO nf_ucast(stav, vycvik, pes, kupon, celkovaCena)
+            OUTPUT Inserted.ucId
+            VALUES (:stav, :vycvik, :pes, :kupon, :celkovaCena)
         """;
 
         public static List<UcastDTO> ZiskejPodleVycviku(Database pDb, int vId) {
@@ -46,15 +61,39 @@ namespace DS2_Project_3 {
             return list;
         }
 
-        public static int ZisekPocetUcastiNaVycviku(Database pDb, int vId) {
+        public static int ZiskejPocetUcastiNaVycviku(Database pDb, int vId) {
             Database db = Database.Connect(pDb);
-            OracleCommand command = db.CreateCommand(SqlZisekPocetUcastNaVycviku);
+            OracleCommand command = db.CreateCommand(SqlZiskejPocetUcastNaVycviku);
             command.Parameters.Add(":vycvik", vId);
 
             int result = db.ExecuteScalar(command);
 
             Database.Close(pDb, db);
             return result;
+        }
+        public static int ZiskejPocetKuponu(Database pDb, string kupon) {
+            Database db = Database.Connect(pDb);
+            OracleCommand command = db.CreateCommand(SqlZiskejPocetKuponu);
+            command.Parameters.Add(":kupon", kupon);
+
+            int result = db.ExecuteScalar(command);
+
+            Database.Close(pDb, db);
+            return result;
+        }
+        public static int PridejNovouUcast(Database pDb, UcastDTO ucast) {
+            Database db = Database.Connect(pDb);
+            OracleCommand command = db.CreateCommand(SqlPridejNovouUcast);
+            command.Parameters.Add(":stav", ucast.Stav);
+            command.Parameters.Add(":vycvik", ucast.Vycvik);
+            command.Parameters.Add(":pes", ucast.Pes);
+            command.Parameters.Add(":kupon", ucast.Kupon);
+            command.Parameters.Add(":celkovaCena", ucast.CelkovaCena);
+
+            int id = db.ExecuteNonQuery(command);
+
+            Database.Close(pDb, db);
+            return id;
         }
     }
 }
