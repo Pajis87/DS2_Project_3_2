@@ -48,7 +48,8 @@ namespace DS2_Project_3 {
                 Console.WriteLine("Úspěšně připojeno k databázi.\n");
             }
 
-            TransakceDAO.MojeTransakce(db, 0, 7, [1], "");
+            //TransakceDAO.MojeTransakce(db, 0, 7, [1], "");
+            TransakceUPDAO.MojeTransakceUP(db, 0, 7, [1], "");
             //TransakceDAO.MojeTransakce(db, 0, 1, [], "");
 
             /*int? id_order = null;
@@ -71,6 +72,7 @@ namespace DS2_Project_3 {
             }*/
 
             db.Close();
+            Console.WriteLine("Připojení k databázi bylo uzavřeno.");
         }
     }
 }

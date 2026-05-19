@@ -14,7 +14,7 @@ namespace DS2_Project_3 {
             WHERE
                 vycvik = :vycvik
         """;
-        private static string SqlZiskejPocetUcastNaVycviku =
+        private static string SqlZiskejPocetUcastiNaVycviku =
         """
             SELECT
                 count(*)
@@ -63,7 +63,7 @@ namespace DS2_Project_3 {
 
         public static int ZiskejPocetUcastiNaVycviku(Database pDb, int vId) {
             Database db = Database.Connect(pDb);
-            OracleCommand command = db.CreateCommand(SqlZiskejPocetUcastNaVycviku);
+            OracleCommand command = db.CreateCommand(SqlZiskejPocetUcastiNaVycviku);
             command.Parameters.Add(":vycvik", vId);
 
             int result = db.ExecuteScalar(command);

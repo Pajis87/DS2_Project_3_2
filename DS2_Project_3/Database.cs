@@ -48,8 +48,8 @@ namespace DS2_Project_3 {
         public void Rollback() {
             SqlTransaction.Rollback();
         }
-
         public int ExecuteNonQuery(OracleCommand command) {
+
             int rowNumber = 0;
             rowNumber = command.ExecuteNonQuery();
             return rowNumber;

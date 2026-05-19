@@ -16,13 +16,13 @@ namespace DS2_Project_3.orm.dao {
         """;
 
 
-        public static List<int> MojeTransakce(Database pDb, int id_uzivatele, int traning_id, int[] id_psu, string? kupon) {
+        public static List<int> MojeTransakce(Database pDb, int id_uzivatele, int id_vycviku, int[] id_psu, string? kupon) {
             Database db = Database.Connect(pDb);
             List<int> nove_ucasti = new List<int>();
             try {
                 db.BeginTransaction();
 
-                VycvikDTO? vycvik = VycvikDAO.ZiskejPodleId(pDb, traning_id);
+                VycvikDTO? vycvik = VycvikDAO.ZiskejPodleId(pDb, id_vycviku);
                 if (vycvik == null) {
                     throw new Exception("Výcvik s tímto ID neexistuje.");
                 }
@@ -32,7 +32,7 @@ namespace DS2_Project_3.orm.dao {
                     throw new Exception("U výcviku je nastavené ID trenéra, který neexistuje.");
                 }
 
-                int pocetVolnychMist = vycvik.pocetMist - UcastDAO.ZiskejPocetUcastiNaVycviku(pDb, traning_id);
+                int pocetVolnychMist = vycvik.pocetMist - UcastDAO.ZiskejPocetUcastiNaVycviku(pDb, id_vycviku);
                 if (pocetVolnychMist != vycvik.pocetMist) {
                     Console.WriteLine("Počet volných míst (redundantí atribut) u výcviku je nastaven špatně.");
                 }
