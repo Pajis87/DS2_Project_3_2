@@ -11,7 +11,16 @@ namespace DS2_Project_3.orm.dao {
 
             OracleParameter p1 = new OracleParameter("p_id_zakaznika", id_uzivatele);
             OracleParameter p2 = new OracleParameter("p_id_vycviku", id_vycviku);
-            OracleParameter p3 = new OracleParameter("p_id_psu", id_psu);
+
+
+            OracleParameter p3 = new OracleParameter("p_id_psu", OracleDbType.Int32);
+            p3.Direction = ParameterDirection.Input;
+
+            p3.CollectionType = OracleCollectionType.PLSQLAssociativeArray;
+            p3.Value = id_psu;
+            p3.Size = id_psu.Length;
+
+
             OracleParameter p4 = new OracleParameter("p_kupon", kupon);
             command.Parameters.Add(p1);
             command.Parameters.Add(p2);
@@ -21,7 +30,7 @@ namespace DS2_Project_3.orm.dao {
             try {
                 db.ExecuteNonQuery(command);
             } catch (Exception ex) {
-                Console.WriteLine("Error MojeTransakce: " + ex.Message);
+                Console.WriteLine("Error MojeTransakce: " + ex.Message.Split('\n')[0]);
                 Database.Close(pDb, db);
                 return false;
             }

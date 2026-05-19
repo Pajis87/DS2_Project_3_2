@@ -49,7 +49,19 @@ namespace DS2_Project_3 {
             }
 
             //TransakceDAO.MojeTransakce(db, 0, 7, [1], "");
-            TransakceUPDAO.MojeTransakceUP(db, 0, 7, [1], "");
+
+
+
+            // Výcvik v minulosti
+            TransakceUPDAO.MojeTransakceUP(db, 1, 21, [1], null);
+
+            // Nedostatek volných míst
+            TransakceUPDAO.MojeTransakceUP(db, 1, 22, [1], null);
+
+            // Nedostatek volných míst
+            TransakceUPDAO.MojeTransakceUP(db, 1, 7, [1], "abc");
+
+
             //TransakceDAO.MojeTransakce(db, 0, 1, [], "");
 
             /*int? id_order = null;
