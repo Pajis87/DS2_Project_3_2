@@ -8,11 +8,11 @@ namespace DS2_Project_3.orm.dao {
             SELECT
                 count(1)
             FROM
-                ucast u INNER JOIN
-                vycvik v ON (u. vycvik = v. vid)
+                nf_ucast u INNER JOIN
+                nf_vycvik v ON (u.vycvik = v.vid)
             WHERE
-                u. pes = :pId AND
-                v. od < :od AND v. do > :do 
+                u.pes = :pId AND
+                v.od < :od AND v.do > :do 
         """;
 
 
@@ -33,9 +33,6 @@ namespace DS2_Project_3.orm.dao {
                 }
 
                 int pocetVolnychMist = vycvik.pocetMist - UcastDAO.ZiskejPocetUcastiNaVycviku(pDb, id_vycviku);
-                if (pocetVolnychMist != vycvik.pocetMist) {
-                    Console.WriteLine("Počet volných míst (redundantí atribut) u výcviku je nastaven špatně.");
-                }
 
                 if (DateTime.Now > vycvik.cas_od) {
                     throw new Exception("Vybraný výcvik již proběhl, nejde se na něj přihlásit.");

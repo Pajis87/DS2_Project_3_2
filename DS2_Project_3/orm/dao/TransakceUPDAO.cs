@@ -27,6 +27,13 @@ namespace DS2_Project_3.orm.dao {
             command.Parameters.Add(p3);
             command.Parameters.Add(p4);
 
+            OracleParameter pRet = new OracleParameter("p_id_pridanych", OracleDbType.Int32);
+            pRet.Direction = ParameterDirection.Output;
+            pRet.CollectionType = OracleCollectionType.PLSQLAssociativeArray;
+            pRet.Size = id_psu.Length;
+
+            command.Parameters.Add(pRet);
+
             try {
                 db.ExecuteNonQuery(command);
             } catch (Exception ex) {
@@ -35,7 +42,7 @@ namespace DS2_Project_3.orm.dao {
                 return false;
             }
 
-
+            Console.WriteLine("Transakce proběhla úspěšně");
             Database.Close(pDb, db);
             return true;
         }

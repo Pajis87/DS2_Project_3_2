@@ -48,9 +48,31 @@ namespace DS2_Project_3 {
                 Console.WriteLine("Úspěšně připojeno k databázi.\n");
             }
 
-            //TransakceDAO.MojeTransakce(db, 0, 7, [1], "");
+
+            // ----------------- C# transakce
 
 
+            // Výcvik v minulosti
+            TransakceDAO.MojeTransakce(db, 1, 21, [1], null);
+
+            // Nedostatek volných míst
+            TransakceDAO.MojeTransakce(db, 1, 22, [1], null);
+
+            // Nedostatek volných míst
+            TransakceDAO.MojeTransakce(db, 1, 7, [1], "abc");
+
+            // Zákazník nevlastní vybraného psa
+            TransakceDAO.MojeTransakce(db, 1, 7, [2], null);
+
+            // Již zapsán
+            TransakceDAO.MojeTransakce(db, 1, 7, [1], null);
+
+            // V pořádku
+            TransakceDAO.MojeTransakce(db, 1, 23, [1], null);
+
+
+
+            // ----------------- Uložená procedura
 
             // Výcvik v minulosti
             TransakceUPDAO.MojeTransakceUP(db, 1, 21, [1], null);
@@ -61,27 +83,9 @@ namespace DS2_Project_3 {
             // Nedostatek volných míst
             TransakceUPDAO.MojeTransakceUP(db, 1, 7, [1], "abc");
 
+            // Zákazník nevlastní vybraného psa
+            TransakceUPDAO.MojeTransakceUP(db, 1, 7, [2], null);
 
-            //TransakceDAO.MojeTransakce(db, 0, 1, [], "");
-
-            /*int? id_order = null;
-            int id_user = 1;
-            int id_staff = 1;
-
-            Order o = new Order();
-            o.id_user = id_user;
-            o.id_staff = id_staff;
-            o.date_order = DateTime.Today;
-            o.price = null;
-
-            if (id_order == null)
-            {
-                OrderDao.Insert(db, o);
-            }
-            else
-            {
-                o.id_order = (int)id_order;
-            }*/
 
             db.Close();
             Console.WriteLine("Připojení k databázi bylo uzavřeno.");
