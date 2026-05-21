@@ -52,41 +52,57 @@ namespace DS2_Project_3 {
             // ----------------- C# transakce
 
 
+            // Výcvik neexistuje
+            TransakceDAO.MojeTransakce(1, 1, [1], null);
+
             // Výcvik v minulosti
-            TransakceDAO.MojeTransakce(db, 1, 21, [1], null);
+            TransakceDAO.MojeTransakce(1, 21, [1], null);
 
             // Nedostatek volných míst
-            TransakceDAO.MojeTransakce(db, 1, 22, [1], null);
+            TransakceDAO.MojeTransakce(1, 22, [1], null);
 
-            // Nedostatek volných míst
-            TransakceDAO.MojeTransakce(db, 1, 7, [1], "abc");
+            // Kupón použit
+            TransakceDAO.MojeTransakce(1, 7, [1], "abc");
 
             // Zákazník nevlastní vybraného psa
-            TransakceDAO.MojeTransakce(db, 1, 7, [2], null);
+            TransakceDAO.MojeTransakce(1, 7, [2], null);
 
             // Již zapsán
-            TransakceDAO.MojeTransakce(db, 1, 7, [1], null);
+            TransakceDAO.MojeTransakce(1, 7, [1], null);
 
             // V pořádku
-            TransakceDAO.MojeTransakce(db, 1, 23, [1], null);
+            TransakceDAO.MojeTransakce(1, 28, new int[] { 1 }, null);
 
+            // V pořádku
+            TransakceDAO.MojeTransakce(1, 29, new int[] { 1, 3 }, null);
 
+            Console.WriteLine("");
 
             // ----------------- Uložená procedura
 
             // Výcvik v minulosti
-            TransakceUPDAO.MojeTransakceUP(db, 1, 21, [1], null);
+            TransakceUPDAO.MojeTransakceUP(1, 21, [1], null);
 
             // Nedostatek volných míst
-            TransakceUPDAO.MojeTransakceUP(db, 1, 22, [1], null);
+            TransakceUPDAO.MojeTransakceUP(1, 22, [1], null);
 
-            // Nedostatek volných míst
-            TransakceUPDAO.MojeTransakceUP(db, 1, 7, [1], "abc");
+            // Kupón použit
+            TransakceUPDAO.MojeTransakceUP(1, 7, [1], "abc");
 
             // Zákazník nevlastní vybraného psa
-            TransakceUPDAO.MojeTransakceUP(db, 1, 7, [2], null);
+            TransakceUPDAO.MojeTransakceUP(1, 7, [2], null);
+
+            // Zákazník nevlastní vybraného psa
+            TransakceUPDAO.MojeTransakceUP(1, 7, [1], null);
+
+            // V pořádku
+            TransakceUPDAO.MojeTransakceUP(1, 26, new int[] { 1 }, null);
+
+            // V pořádku
+            TransakceUPDAO.MojeTransakceUP(1, 27, new int[] { 1, 3 }, null);
 
 
+            Console.WriteLine("");
             db.Close();
             Console.WriteLine("Připojení k databázi bylo uzavřeno.");
         }

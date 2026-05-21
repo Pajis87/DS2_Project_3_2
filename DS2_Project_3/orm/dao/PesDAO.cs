@@ -17,10 +17,9 @@ namespace DS2_Project_3.orm.dao {
                 pId = :pId
         """;
 
-        public static PesDTO? ZiskejPodleId(Database pDb, int pId) {
-            Database db = Database.Connect(pDb);
+        public static PesDTO? ZiskejPodleId(Database db, int pId) {
             OracleCommand command = db.CreateCommand(SqlZiskejPodleId);
-            command.Parameters.Add(":pId", pId);
+            command.Parameters.Add("pId", pId);
             OracleDataReader reader = db.Select(command);
 
             List<PesDTO> list = new List<PesDTO>();
@@ -38,8 +37,6 @@ namespace DS2_Project_3.orm.dao {
                 list.Add(pes);
             }
             reader.Close();
-
-            Database.Close(pDb, db);
 
             if (list.Count == 0)
                 return null;

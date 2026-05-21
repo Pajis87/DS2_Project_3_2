@@ -17,10 +17,9 @@ namespace DS2_Project_3.orm.dao {
                 vId = :vId
         """;
 
-        public static VycvikDTO? ZiskejPodleId(Database pDb, int vId) {
-            Database db = Database.Connect(pDb);
+        public static VycvikDTO? ZiskejPodleId(Database db, int vId) {
             OracleCommand command = db.CreateCommand(SqlZiskejPodleId);
-            command.Parameters.Add(":vId", vId);
+            command.Parameters.Add("vId", vId);
             OracleDataReader reader = db.Select(command);
 
             List<VycvikDTO> list = new List<VycvikDTO>();
@@ -38,8 +37,6 @@ namespace DS2_Project_3.orm.dao {
                 list.Add(vycvik);
             }
             reader.Close();
-
-            Database.Close(pDb, db);
 
             if (list.Count == 0)
                 return null;

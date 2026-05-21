@@ -1,5 +1,4 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using System.Security.Cryptography;
 
 namespace DS2_Project_3.orm.dao {
     public static class TransakceDAO {
@@ -12,27 +11,29 @@ namespace DS2_Project_3.orm.dao {
                 nf_vycvik v ON (u.vycvik = v.vid)
             WHERE
                 u.pes = :pId AND
-                v.od < :od AND v.do > :do 
+                v.od < :do AND v.do > :od
         """;
 
 
-        public static List<int> MojeTransakce(Database pDb, int id_uzivatele, int id_vycviku, int[] id_psu, string? kupon) {
-            Database db = Database.Connect(pDb);
+        public static List<int> MojeTransakce(int id_uzivatele, int id_vycviku, int[] id_psu, string? kupon) {
+            Database db = new Database();
+            db.Connect();
+
             List<int> nove_ucasti = new List<int>();
             try {
                 db.BeginTransaction();
 
-                VycvikDTO? vycvik = VycvikDAO.ZiskejPodleId(pDb, id_vycviku);
+                VycvikDTO? vycvik = VycvikDAO.ZiskejPodleId(db, id_vycviku);
                 if (vycvik == null) {
                     throw new Exception("Výcvik s tímto ID neexistuje.");
                 }
 
-                TrenerDTO? trener = TrenerDAO.ZiskejPodleId(pDb, vycvik.trenerId);
+                TrenerDTO? trener = TrenerDAO.ZiskejPodleId(db, vycvik.trenerId);
                 if (trener == null) {
                     throw new Exception("U výcviku je nastavené ID trenéra, který neexistuje.");
                 }
 
-                int pocetVolnychMist = vycvik.pocetMist - UcastDAO.ZiskejPocetUcastiNaVycviku(pDb, id_vycviku);
+                int pocetVolnychMist = vycvik.pocetMist - UcastDAO.ZiskejPocetUcastiNaVycviku(db, id_vycviku);
 
                 if (DateTime.Now > vycvik.cas_od) {
                     throw new Exception("Vybraný výcvik již proběhl, nejde se na něj přihlásit.");
@@ -42,12 +43,12 @@ namespace DS2_Project_3.orm.dao {
                     throw new Exception("Na vybraném výcviku není dostatek volných míst.");
                 }
 
-                if (kupon != null && UcastDAO.ZiskejPocetKuponu(pDb, kupon) > 0) {
+                if (kupon != null && UcastDAO.ZiskejPocetKuponu(db, kupon) > 0) {
                     throw new Exception("Kupon je již použit");
                 }
 
                 foreach (int id_psa in id_psu) {
-                    PesDTO? pes = PesDAO.ZiskejPodleId(pDb, id_psa);
+                    PesDTO? pes = PesDAO.ZiskejPodleId(db, id_psa);
                     if (pes == null) {
                         throw new Exception("Pes s ID " + id_psa + " neexistuje.");
                     }
@@ -56,51 +57,50 @@ namespace DS2_Project_3.orm.dao {
                         throw new Exception("Uživatel s ID " + id_uzivatele + " není majitelem psa s ID " + id_psa + " (" + pes.Jmeno  + ").");
                     }
 
-                    int pocet = ZiskejKolidujiciUcasti(pDb, pes, vycvik);
+                    int pocet = ZiskejKolidujiciUcasti(db, pes, vycvik);
                     if (pocet > 0) {
                         throw new Exception("Pes s ID " + id_psa + " (" + pes.Jmeno + ") je v době výcviku již zapsán na jiný výcvik.");
                     }
 
                     UcastDTO ucast = new UcastDTO {
-                        Stav = 0,
+                        Stav = 1,
                         Vycvik = vycvik.vId,
                         Pes = pes.PId,
                         Kupon = kupon,
                         CelkovaCena = (vycvik.cas_do - vycvik.cas_od).Hours * trener.cenaZaHodinu
                     };
-                    nove_ucasti.Add(UcastDAO.PridejNovouUcast(pDb, ucast));
+                    nove_ucasti.Add(UcastDAO.PridejNovouUcast(db, ucast));
                 }
 
 
                 db.EndTransaction();
+
             } catch (Exception e) {
                 Console.Error.WriteLine("ERROR: " + e.Message);
                 db.Rollback();
+                return nove_ucasti;
             } finally {
-                Database.Close(pDb, db);
+                db.Close();
             }
+
 
             Console.WriteLine("ID nově vložených účastí: [");
             foreach (int id in nove_ucasti) {
                 Console.WriteLine("\t" + id);
             }
             Console.WriteLine("]");
+
             return nove_ucasti;
         }
 
-        public static int ZiskejKolidujiciUcasti(Database pDb, PesDTO pes, VycvikDTO vycvik) {
-            Database db = Database.Connect(pDb);
+        public static int ZiskejKolidujiciUcasti(Database db, PesDTO pes, VycvikDTO vycvik) {
             OracleCommand command = db.CreateCommand(SqlZiskejKolidujiciUcasti);
-            command.Parameters.Add(":pId", pes.PId);
-            command.Parameters.Add(":od", vycvik.cas_od);
-            command.Parameters.Add(":do", vycvik.cas_do);
-            OracleDataReader reader = db.Select(command);
+            command.Parameters.Add("pId", pes.PId);
+            command.Parameters.Add("do", vycvik.cas_do);
+            command.Parameters.Add("od", vycvik.cas_od);
 
-            int pocet = 0;
-            while (reader.Read()) pocet++;
-            reader.Close();
+            int pocet = db.ExecuteScalar(command);
 
-            Database.Close(pDb, db);
             return pocet;
         }
     }

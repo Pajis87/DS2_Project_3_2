@@ -3,8 +3,11 @@ using System.Data;
 
 namespace DS2_Project_3.orm.dao {
     public static class TransakceUPDAO {
-        public static bool MojeTransakceUP(Database pDb, int id_uzivatele, int id_vycviku, int[] id_psu, string? kupon) {
-            Database db = Database.Connect(pDb);
+        public static List<int> MojeTransakceUP(int id_uzivatele, int id_vycviku, int[] id_psu, string? kupon) {
+            List<int> id_pridanych = new List<int>();
+
+            Database db = new Database();
+            db.Connect();
 
             OracleCommand command = db.CreateCommand("MojeTransakce");
             command.CommandType = CommandType.StoredProcedure;
@@ -22,7 +25,7 @@ namespace DS2_Project_3.orm.dao {
 
 
             OracleParameter p4 = new OracleParameter("p_kupon", kupon);
-            command.Parameters.Add(p1);
+            command.Parameters.Add(p1); 
             command.Parameters.Add(p2);
             command.Parameters.Add(p3);
             command.Parameters.Add(p4);
@@ -36,15 +39,22 @@ namespace DS2_Project_3.orm.dao {
 
             try {
                 db.ExecuteNonQuery(command);
-            } catch (Exception ex) {
-                Console.WriteLine("Error MojeTransakce: " + ex.Message.Split('\n')[0]);
-                Database.Close(pDb, db);
-                return false;
-            }
 
-            Console.WriteLine("Transakce proběhla úspěšně");
-            Database.Close(pDb, db);
-            return true;
+                id_pridanych = ((Oracle.ManagedDataAccess.Types.OracleDecimal[])pRet.Value).Select(x => (int)x.Value).ToList();
+
+                Console.WriteLine("ID nově vložených účastí: [");
+                foreach (int id in id_pridanych) {
+                    Console.WriteLine("\t" + id);
+                }
+                Console.WriteLine("]");
+
+            } catch (Exception ex) {
+                Console.WriteLine("ERROR: " + ex.Message.Split('\n')[0]);
+                db.Close();
+                return id_pridanych;
+            }
+            db.Close();
+            return id_pridanych;
         }
     }
 }
