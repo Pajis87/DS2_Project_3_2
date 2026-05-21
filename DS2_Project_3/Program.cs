@@ -1,45 +1,6 @@
 ﻿using DS2_Project_3.orm.dao;
 
 namespace DS2_Project_3 {
-
-    /*
-     
-    v sqldeveloper vytvorit sequence
-    SELECT nazev_seq nextval;
-
-
-    ID number default nazev_seq.nextval
-
-
-    zapnout identity column nastavit column sequence a nemusim pouzivat sekvence
-
-    Takze bud tak nebo tak
-
-
-
-    INSERT INTO neco(neco)
-    VALUES(neco)
-    RETURNING ID INTO vid;
-
-    pprint(vid)
-
-
-
-
-    SELECT name, value
-    FROM JSON_TABLE(
-        "
-            {
-                {"name":"neco", "value":10}        
-            },
-            "$[*]",
-            
-        "
-    )
-     
-     */
-
-
     public class Program {
         public static void Main(string[] args) {
             Database db = new Database();
@@ -78,6 +39,8 @@ namespace DS2_Project_3 {
 
             Console.WriteLine("");
 
+
+
             // ----------------- Uložená procedura
 
             // Výcvik v minulosti
@@ -100,6 +63,8 @@ namespace DS2_Project_3 {
 
             // V pořádku
             TransakceUPDAO.MojeTransakceUP(1, 27, new int[] { 1, 3 }, null);
+
+
 
 
             Console.WriteLine("");
